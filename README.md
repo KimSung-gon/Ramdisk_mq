@@ -13,6 +13,6 @@ We will upload specific code when we elemente critical bugs.
 
 command :
 sudo modprobe ramdisk_mq bs=x queue_mode=x size=x <br/>
-bs : Block size(Kb)
-queue mode : 0-bio, 1-single queue, 2-multi queue
-size : Module size(Mb)
+bs : Block size(Kb)<br/>
+queue mode : 0-bio, 1-single queue, 2-multi queue<br/>
+size : Module size(Mb)<br/>
