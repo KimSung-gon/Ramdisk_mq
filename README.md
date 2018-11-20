@@ -7,7 +7,7 @@ Ramdisk is already exist but can not use for evaluate blk-mq's scalablilty. Beca
 For evaluate blk-mq's scalability, need to implement new Ram based block device using blk-mq. 
 As a result, We are implementing Ramdisk_MQ.
 
-We will upload specific code when we elemente critical bugs.
+We will upload specific code when we eliminate critical bugs.
 
 # Usage
 
