@@ -9,6 +9,8 @@ As a result, We are implementing Ramdisk_MQ.
 
 We will upload specific code when we eliminate critical bugs.
 
+reference : https://github.com/gurugio/mybrd/
+
 # Usage
 
 command :
