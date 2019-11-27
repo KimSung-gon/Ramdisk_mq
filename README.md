@@ -7,7 +7,7 @@ Ramdisk is already exist but can not use for evaluate blk-mq's scalablilty. Beca
 For evaluate blk-mq's scalability, need to implement new Ram based block device using blk-mq. 
 As a result, We are implementing Ramdisk_MQ.
 
-We will upload specific code when we eliminate critical bugs.
+We made specific code by changing exist code which merged ramdisk and block layer multi queue on kernel 5.0 when we eliminate critical bugs.
 
 reference : https://github.com/gurugio/mybrd/
 
