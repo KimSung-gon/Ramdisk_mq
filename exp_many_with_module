@@ -1,0 +1,59 @@
+#!/bin/bash
+
+OP="randread"
+#DEVICE="/dev/ram0"
+#DEVICE="/dev/nullb0"
+#DEVICE="/dev/sdb"
+#DEVICE="/dev/nvme2n1"
+#DEVICE="/dev/nvme0n1"
+DEVICE="/dev/ramdisk_mq"
+#DEVICE="/mnt/ramdisk0/test"
+#DEVICE="/home/kesl/ramdisk_mq/aaa"
+#DEVICE="/dev/shm"
+#DEVICE="/dev/nvme1n1"
+#DEVICE="/home/kesl/re_test_20181206/bio/ramdisk/test"
+BSSIZE="4k"
+
+
+#for y in 3 4
+for y in 2 3 4 5 6 7 8 9 10 12 15 20 24 30 40 60 120 
+do
+    for x in 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536
+    do  
+        nr_hw_queues=$y
+        hw_queue_depth=$x
+
+        #echo modprobe null_blk completion_nsec=0 irqmode=0 nr_devices=1 bs=4096 queue_mode=2 submit_queues=$y hw_queue_depth=$x
+        echo modprobe ramdisk_mq nr_hw_queues=$nr_hw_queues queue_mode=2 ramdisk_mq_size=419430400 hw_queue_depth=$hw_queue_depth
+        #modprobe null_blk completion_nsec=0 irqmode=0 nr_devices=1 bs=4096 queue_mode=2 submit_queues=$y hw_queue_depth=$x
+        modprobe ramdisk_mq nr_hw_queues=$nr_hw_queues queue_mode=2 ramdisk_mq_size=419430400 hw_queue_depth=$hw_queue_depth
+    
+        location=hw_queues\_$nr_hw_queues\_queue_depth\_$hw_queue_depth
+    
+        echo mkdir $location
+        mkdir $location
+    
+        for z in 5 10 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 100 105 110 115 120 
+        do
+            JOB=$z
+            DEPTH="128"
+            NUM=`expr $z - 1`
+            TIME=5
+            sync;echo 3 > /proc/sys/vm/drop_caches
+            sleep 2
+            echo fio --output=/media/sda/kesl/re_test_20181206/bio/$location/job:\_$JOB\_dp:\_$DEPTH.txt --filename=$DEVICE --rw=$OP --iodepth=$DEPTH --numjobs=$JOB #--thread
+            sudo ./../fio/./fio --output=/media/sda/kesl/re_test_20181206/bio/$location/job:\_$JOB\_dp:\_$DEPTH.txt --name=myjob --filename=$DEVICE --ioengine=libaio --direct=1 --norandommap --randrepeat=0 --runtime=$TIME --time_based --blocksize=$BSSIZE --rw=$OP --iodepth=$DEPTH --numjobs=$JOB --gtod_reduce=1 --thread --group_reporting=1 # --numa_cpu_nodes=all --numa_mem_policy=bind:all --fadvise_hint=0
+
+        done
+    
+        #echo rmmod null_blk
+        echo rmmod ramdisk_mq
+        #rmmod null_blk
+        rmmod ramdisk_mq
+    done
+done
+
+# this make the directory and data on ./
+# ex)
+# pwd/hw_queues_*_queue_depth_*/job:_*_dp:_128.txt
+
